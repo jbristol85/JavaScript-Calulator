@@ -1,13 +1,13 @@
 var calculator = {
-    values: [],
+    displayValues: [],
     // calculateValues: this.values,
-    justValues: function() { return calculator.values.join("").match(/[0-9]/g) },
-    operatorsPushed: [],
+    evalValues: [],
+    currentValues: [],
     total: "",
     displayInputs: function() {
         // for(var i=0;i<this.values.length;i++){
         // console.log(this.values.join(""));
-        document.getElementById("inputDisplay").innerHTML = this.values.join('');
+        document.getElementById("inputDisplay").innerHTML = this.displayValues.join('');
 
     },
     calculations: function() {
@@ -25,8 +25,12 @@ var calculator = {
                 return num1 * num2;
             },
             divide: function(num1, num2) {
+                if(num2 == 0){
+                    alert("err");
+                }else{
                 console.log("divide function");
                 return num1 / num2;
+                }
             },
             add: function(num1, num2) {
                 console.log("add function");
@@ -52,151 +56,126 @@ var calculator = {
         // function operate() {
         console.log("here1");
 
+        // function parenthesis(){
+        //      var openParen = calculator.evalValues.indexOf("(");
+        //         var closeParen = calculator.evalValues.indexOf(")");
+        //         console.log("parens", openParen, closeParen);
+        //         var parenOperation = calculator.evalValues.slice(openParen +1, closeParen);
+        //         console.log(parenOperation);
+        //         // var parenOperationSplit = parenOperation.split("");
+        //         var result = operate(parenOperation);
+        //         // var parenOperator = regExp.exec(parenOperation);
+        //         // console.log(parenOperator);
+        //         // var parenOperationSplit = parenOperation.split(regExp);
+        //         // console.log(parenOperationSplit);
+        //         // var parenMapped = operatorMap[parenOperator[0][0]];
+        //         // console.log(parenMapped);
+        //         // var result = operators[parenMapped](parseInt(parenOperationSplit[0]), parseInt(parenOperationSplit[1]));
+        //         console.log(result);
+        //         console.log("eval",calculator.evalValues)
+        //         calculator.evalValues.splice(openParen, parenOperation.length, operate(parenOperation))
+        //         console.log("eval",calculator.evalValues)
+        //         // calculator.values.splice(openParen, parenOperation.length - 1);
+        //         // calculator.operatorsPushed.splice(calculator.operatorsPushed.indexOf("("), calculator.operatorsPushed.indexOf(")"));
+        //         // calculator.evalValues.push(result);
+        //         // operate();
+        // }
 
-        function operate() {
 
-            var regExp = /[^0-9\.]/g;
+        function operate(arr) {
 
-            var valueString = calculator.values.join("");
-            console.log(valueString)
-
-
-            // for (var z = 0; z < 2; z++) {
-
-            /* if parenthesis run parenthesis function, replace those numbers in array,
-            find index of parenthesis, pop out the values and operate
-            send back through the function
-            check for exponents if true, run exponenet function
-            send back through the function
-            if multiplication, run multiplication function
-            send back through the function
-            */
+            // var regExp = ^[-+]?[0-9]\d*(\.\d+)?$;
+            console.log("arr", arr)
+            // var valuesJoined = arr.join("");
+            // console.log(valuesJoined)
+            // var valueString = arr.join("");
+            // console.log(valueString);
 
 
-            //     console.log("here5");
-            //     var mapped = operatorMap[operatorValues[0][0]];
-            //     console.log("mapped", operatorMap[operatorValues[0][0]]);
-
-            //     runningTotal = operators[mapped](beforeOperatorValues[0], beforeOperatorValues[1]);
-            //     console.log(mapped, runningTotal);
-            //     calculator.displayTotal(runningTotal);
-            //     operatorValues.splice(0, 1);
-
-            //     console.log(valueString);
-            //     console.log(beforeOperatorValues);
-            //     console.log(operatorValues[0]);
-            //     console.log(index);
-            //     console.log(z);
-            // }
+            var indexes=[]
+            arr.forEach(function(value, index) {
+                // console.log(value)
+                if (isNaN(value)) {
+                    // console.log(index);
+                    indexes.push(index);
+                }
+                
+            });
+            console.log(indexes)
             
-            console.log(valueString.indexOf(regExp))
-            if (!regExp.test(valueString)) {
+
+            if (indexes.length === 0) {
                 console.log("no operators");
-                calculator.total = valueString;
+                calculator.total = calculator.evalValues;
                 calculator.displayTotal();
             }
-            else if (valueString.match(/[\(]/g) && valueString.match(/[\)]/g)) {
-                var openParen = valueString.search(/[\(]/g);
-                var closeParen = valueString.search(/[\)]/g);
-                console.log(openParen, closeParen);
-                var parenOperation = valueString.slice(openParen +1, closeParen);
-                console.log(parenOperation);
-                var parenOperator = regExp.exec(parenOperation);
-                console.log(parenOperator);
-                var parenOperationSplit = parenOperation.split(regExp);
-                console.log(parenOperationSplit);
-                var parenMapped = operatorMap[parenOperator[0][0]];
-                console.log(parenMapped);
-                var result = operators[parenMapped](parseInt(parenOperationSplit[0]), parseInt(parenOperationSplit[1]));
-                console.log(result);
-                calculator.values.splice(openParen, closeParen+1);
-                calculator.operatorsPushed.splice(calculator.operatorsPushed.indexOf("("), calculator.operatorsPushed.indexOf(")"));
-                calculator.values.push(result.toString());
-                operate();
-            }
-            else if (valueString.match(/[\^]/g)) {
-                console.log("exponent");
-                var exponentIndex = valueString.search(/[\^]/g);
-                console.log(exponentIndex)
-                var exponentResult = operators.exponent(parseInt(valueString[exponentIndex - 1]), parseInt(valueString[exponentIndex + 1]));
-                console.log(exponentResult)
-                calculator.values.splice(exponentIndex - 1, 3);
-                calculator.values.push(exponentResult.toString())
-                operate();
-            }
-            else if (valueString.match(/[\*]/g)) {
-                console.log("multiply");
-                var multiplyIndex = valueString.search(/[\*]/g);
-                console.log(multiplyIndex)
-                var multiplyResult = operators.multiply(parseInt(valueString[multiplyIndex - 1]), parseInt(valueString[multiplyIndex + 1]));
-                console.log(multiplyResult)
-                calculator.values.splice(multiplyIndex - 1, 3);
-                calculator.values.push(multiplyResult.toString())
-                operate();
-            }
-            else if (valueString.match(/[\/]/g)) {
-                console.log("divide");
-                var divideIndex = valueString.search(/[\/]/g);
-                console.log(divideIndex)
-                var divideResult = operators.divide(parseInt(valueString[divideIndex - 1]), parseInt(valueString[divideIndex + 1]));
-                console.log(divideResult)
-                calculator.values.splice(divideIndex - 1, 3);
-                calculator.values.push(divideResult.toString())
-                operate();
-            }
-            else if (valueString.match(/[\+]/g)) {
-                console.log("add");
-                var addIndex = valueString.search(/[\+]/g);
-                console.log(addIndex)
-                var addResult = operators.add(parseInt(valueString[addIndex - 1]), parseInt(valueString[addIndex + 1]));
-                console.log(addResult)
-                calculator.values.splice(addIndex - 1, 3);
-                calculator.values.push(addResult.toString())
-                operate();
-            }
-            else if (valueString.match(/[\-]/g)) {
-                console.log("subtract");
-                var subtractIndex = valueString.search(/[\-]/g);
-                console.log(subtractIndex)
-                var subtractResult = operators.subtract(parseInt(valueString[subtractIndex - 1]), parseInt(valueString[subtractIndex + 1]));
-                console.log(subtractResult)
-                calculator.values.splice(subtractIndex - 1, 3);
-                calculator.values.push(subtractResult.toString())
-                operate();
-            }
-
-
-            // var parenArray = [];
-            // var parenOperator = regExp.exec(parenOperation);
-            // console.log(parenOperation);
-            // var parenOperatorMatch = parenOperation.match(regExp);
-            // console.log(parenOperatorMatch)
-            // var parenOperatorSearch = parenOperation.search(regExp);
-            // console.log(parenOperatorSearch)  
-            // console.log(parenOperation[0, parenOperatorSearch-1])
-            // parenArray.push(parseInt(parenOperation[0, parenOperatorSearch-1]));
-            // parenArray.push(parseInt(parenOperation[parenOperatorSearch +1, parenOperation.length-1])) 
-            // console.log(parenArray);   
-            // if (calculator.values.join("").match(regExp)) {
-            //     console.log("here2");
-            //     var valueString = calculator.values.join("");
-
-            //     beforeOperatorValues.push(parseInt(valueString.slice(0, index)));
-            //     operatorValues.push(regExp.exec(valueString));
-            //     beforeOperatorValues.push(parseInt(valueString.slice(index + 1, valueString.length)));
-            //     //   beforeOperatorValues.push(parseInt(valueString));
-            //     // var index = this.values.join("").search(regExp)
-            //     console.log("here3");
-            //     // console.log(z);
-            //     console.log(operatorValues[z]);
-            //     console.log(operatorValues.length);
-
-            //     operate();
+            // else if (arr.indexOf("(") > -1 && arr.indexOf(")") > -1) {
+            //      var openParen = calculator.evalValues.indexOf("(");
+            //     var closeParen = calculator.evalValues.indexOf(")");
+            //     console.log("parens", openParen, closeParen);
+            //     var parenOperation = calculator.evalValues.slice(openParen +1, closeParen);
+            //     console.log(parenOperation);
+            //   parenthesis(parenOperation);
             // }
+            else if (calculator.evalValues.indexOf("^") > -1) {
+                console.log("exponent");
+                var exponentIndex = arr.indexOf("^");
+                console.log(exponentIndex)
+                var exponentResult = operators.exponent(parseInt(calculator.evalValues[exponentIndex - 1]), parseInt(calculator.evalValues[exponentIndex + 1]));
+                console.log(exponentResult)
+                calculator.evalValues.splice(exponentIndex - 1, 3,exponentResult.toString());
+                // calculator.evalValues.push(exponentResult.toString())
+                operate(calculator.evalValues);
+            }
+            else if (calculator.evalValues.indexOf("*") > -1) {
+                console.log("multiply");
+                var multiplyIndex = arr.indexOf("*");
+                console.log(multiplyIndex)
+                var multiplyResult = operators.multiply(parseInt(calculator.evalValues[multiplyIndex - 1]), parseInt(calculator.evalValues[multiplyIndex + 1]));
+                console.log(multiplyResult)
+                console.log(calculator.evalValues)
+                // calculator.values.splice(multiplyIndex - 1, 3);
+                calculator.evalValues.splice(multiplyIndex - 1, 3, multiplyResult.toString())
+                console.log(calculator.evalValues)
+                operate(calculator.evalValues);
+            }
+            else if (calculator.evalValues.indexOf("/") !== -1) {
+                console.log("divide");
+                var divideIndex = arr.indexOf("/");
+                console.log(divideIndex)
+                var divideResult = operators.divide(parseInt(calculator.evalValues[divideIndex - 1]), parseInt(calculator.evalValues[divideIndex + 1]));
+                console.log(divideResult)
+                calculator.evalValues.splice(divideIndex - 1, 3, divideResult.toString());
+                // calculator.evalValues.push(divideResult.toString())
+                operate(calculator.evalValues);
+                
+            }
+            else if (calculator.evalValues.indexOf("+") != -1) {
+                console.log("add");
+                var addIndex = arr.indexOf("+");
+                console.log(addIndex)
+                var addResult = operators.add(parseInt(calculator.evalValues[addIndex - 1]), parseInt(calculator.evalValues[addIndex + 1]));
+                console.log(addResult)
+                calculator.evalValues.splice(addIndex - 1, 3, addResult.toString());
+                // calculator.evalValues.push(addResult.toString())
+                operate(calculator.evalValues);
+            }
+            else if (calculator.evalValues.indexOf("-") > -1) {
+                console.log("subtract");
+                var subtractIndex = arr.indexOf("-");
+                console.log(subtractIndex)
+                var subtractResult = operators.subtract(parseInt(arr[subtractIndex - 1]), parseInt(arr[subtractIndex + 1]));
+                console.log(subtractResult)
+                console.log(calculator.evalValues)
+                calculator.evalValues.splice(subtractIndex - 1, arr.length, subtractResult.toString());
+                // calculator.evalValues.push(subtractResult.toString())
+                console.log(calculator.evalValues)
+                operate(calculator.evalValues);
+            }
 
         }
-        // alert("must close parenthesis");
-        operate();
+        
+        operate(calculator.evalValues);
     },
     displayTotal: function(total) {
         console.log("display", calculator.total)
@@ -207,7 +186,8 @@ var calculator = {
 var keys = document.getElementsByClassName('keys');
 for (var i = 0; i < keys.length; i++) {
     keys[i].addEventListener("click", function() {
-        calculator.values.push(event.target.id);
+        calculator.displayValues.push(event.target.id);
+        calculator.currentValues.push(event.target.id);
         // calculator.calculateValues.push(event.target.id);
         calculator.displayInputs();
         // calculator.calculations();
@@ -217,9 +197,15 @@ for (var i = 0; i < keys.length; i++) {
 var operator = document.getElementsByClassName('operator');
 for (var i = 0; i < operator.length; i++) {
     operator[i].addEventListener("click", function() {
-        calculator.values.push(event.target.id);
-        calculator.operatorsPushed.push(event.target.id);
-        calculator.currentValue = event.target.id;
+
+        if (calculator.currentValues.length > 0) {
+            calculator.evalValues.push(calculator.currentValues.join(""));
+        }
+        calculator.currentValues = [];
+        calculator.displayValues.push(event.target.id);
+        calculator.evalValues.push(event.target.id);
+        // calculator.currentValues = [];
+        // calculator.currentValue = event.target.id;
         calculator.displayInputs();
 
         // calculator.calculations();
@@ -227,6 +213,10 @@ for (var i = 0; i < operator.length; i++) {
 
 }
 document.getElementById("equals").onclick = function() {
-
+    if (calculator.currentValues.length > 0) {
+            calculator.evalValues.push(calculator.currentValues.join(""));
+        }
+    console.log(calculator.evalValues)
+    calculator.currentValues = [];
     calculator.calculations();
 };
