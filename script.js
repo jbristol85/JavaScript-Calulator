@@ -1,9 +1,10 @@
 var calculator = {
     displayValues: [],
-    // calculateValues: this.values,
+    resetValues:[],
     evalValues: [],
     currentValues: [],
     total: "",
+    hitEquals: false,
     displayInputs: function() {
         // for(var i=0;i<this.values.length;i++){
         // console.log(this.values.join(""));
@@ -56,7 +57,8 @@ var calculator = {
         // function operate() {
         console.log("here1");
 
-        // function parenthesis(){
+        // function parenthesis(arr){
+        //     console.log("parenthesis", arr)
         //      var openParen = calculator.evalValues.indexOf("(");
         //         var closeParen = calculator.evalValues.indexOf(")");
         //         console.log("parens", openParen, closeParen);
@@ -72,8 +74,10 @@ var calculator = {
         //         // console.log(parenMapped);
         //         // var result = operators[parenMapped](parseInt(parenOperationSplit[0]), parseInt(parenOperationSplit[1]));
         //         console.log(result);
+        //         console.log("openparenLength", parenOperation.length)
         //         console.log("eval",calculator.evalValues)
-        //         calculator.evalValues.splice(openParen, parenOperation.length, operate(parenOperation))
+                
+        //         calculator.evalValues.splice(openParen, closeParen - openParen, operate(parenOperation).toString())
         //         console.log("eval",calculator.evalValues)
         //         // calculator.values.splice(openParen, parenOperation.length - 1);
         //         // calculator.operatorsPushed.splice(calculator.operatorsPushed.indexOf("("), calculator.operatorsPushed.indexOf(")"));
@@ -90,7 +94,7 @@ var calculator = {
             // console.log(valuesJoined)
             // var valueString = arr.join("");
             // console.log(valueString);
-
+            
 
             var indexes=[]
             arr.forEach(function(value, index) {
@@ -195,28 +199,64 @@ for (var i = 0; i < keys.length; i++) {
 
 }
 var operator = document.getElementsByClassName('operator');
+
 for (var i = 0; i < operator.length; i++) {
     operator[i].addEventListener("click", function() {
-
-        if (calculator.currentValues.length > 0) {
+console.log(calculator.currentValues)
+        if (calculator.currentValues != []) {
             calculator.evalValues.push(calculator.currentValues.join(""));
+            calculator.resetValues.push(calculator.currentValues.join(""));
         }
         calculator.currentValues = [];
         calculator.displayValues.push(event.target.id);
         calculator.evalValues.push(event.target.id);
+        calculator.resetValues.push(event.target.id)
         // calculator.currentValues = [];
         // calculator.currentValue = event.target.id;
+        
         calculator.displayInputs();
-
+        
         // calculator.calculations();
     }, false);
 
 }
 document.getElementById("equals").onclick = function() {
+    calculator.hitEquals = false;
     if (calculator.currentValues.length > 0) {
             calculator.evalValues.push(calculator.currentValues.join(""));
+            calculator.resetValues.push(calculator.currentValues.join(""));
+            calculator.hitEquals = true;
         }
     console.log(calculator.evalValues)
     calculator.currentValues = [];
     calculator.calculations();
 };
+document.getElementById("c").onclick = function(){
+    
+    var slicedReset= calculator.resetValues.slice(0, -1);
+    calculator.currentValues = [];
+    if(calculator.hitEquals){
+    
+    // calculator.evalValues.splice(calculator.displayValues.length-2, 2);
+    calculator.evalValues = calculator.resetValues.splice(0,calculator.resetValues.length-1);
+    // calculator.resetValues= calculator.evalValues;
+    calculator.resetValues = slicedReset;
+    calculator.displayValues = slicedReset;
+    
+    }else{
+        calculator.displayValues.pop();
+        
+    }
+    calculator.hitEquals=false;
+    calculator.displayInputs();
+    calculator.calculations();
+};
+document.getElementById("ce").onclick = function(){
+    calculator.currentValues=[];
+    calculator.displayValues = [];
+    calculator.resetValues = [];
+    calculator.evalValues=[];
+    calculator.total="";
+    calculator.displayInputs();
+    calculator.displayTotal();
+}
