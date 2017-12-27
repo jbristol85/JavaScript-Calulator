@@ -1,29 +1,51 @@
-.container{
-	border:1px solid black;
+.container {
+	border: 1px solid black;
 	/*height: 60px;*/
 	width: 500px;
 	padding: 10px;
 	margin-top: 100px;
+	border-radius:5px;
 }
-#resultSection{
+
+#results {
 	/*border: 1px solid black;*/
-	margin-bottom:10px;
-	height: 70px;
+	margin-bottom: 10px;
+	/*height: 70px;*/
+	font-size:2.5em !important;
+
 }
-#inputDisplay{
+
+#inputDisplay {
 	border-bottom: 1px solid black;
 }
-#inputDisplay, #resultSection{
+
+#inputDisplay,
+#results {
 	margin-bottom: 0px;
-	height:35px;
+	height: 35px;
+	font-size:1.5em;
+	
 }
+
 /*hr{*/
-	/*margin-top:2px;*/
-	/*margin-bottom: 2px;*/
+
+/*margin-top:2px;*/
+
+/*margin-bottom: 2px;*/
+
 /*	color:black;*/
+
 /*}*/
-.keys, .operator, .back, .equals{
+
+.keys,
+.operator,
+.back,
+.equals,
+.negative,
+.decimal {
 	width: 70px;
-	margin:3px;
-	padding:10px;
+	margin: 3px;
+	padding: 10px;
+	font-size:2em;
+	border-radius:5px;
 }
